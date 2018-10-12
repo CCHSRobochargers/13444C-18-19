@@ -15,7 +15,7 @@
 
 static const float ticksPerInch = 0.95 * (627.2 / (4.0 * PI));
 //adjust to compensate for wheel slip
-static const float ticksPerDeg = 1.11 * (ticksPerInch * 12.0 * PI) / 360.0;
+static const float ticksPerDeg = 1.02 * (ticksPerInch * 12.0 * PI) / 360.0;
 
 // This code is for the VEX cortex platform
 #pragma platform(VEX2)
@@ -54,13 +54,13 @@ void move(float dist, int speed, bool hold)
 		wait1Msec(10);
 }
 
-void spin(float rev, int speed, bool hold)
+void spin(float deg, int speed, bool hold)
 {
 	resetMotorEncoder(rightMotor);
 	resetMotorEncoder(leftMotor);
 
-	setMotorTarget(rightMotor, rev*ticksPerDeg, speed, hold);
-	setMotorTarget(leftMotor, -rev*ticksPerDeg, speed, hold);
+	setMotorTarget(rightMotor, deg*ticksPerDeg, speed, hold);
+	setMotorTarget(leftMotor, -deg*ticksPerDeg, speed, hold);
 
 	while (!getMotorTargetCompleted(rightMotor) && !getMotorTargetCompleted(leftMotor))
 		wait1Msec(10);
@@ -68,18 +68,18 @@ void spin(float rev, int speed, bool hold)
 
 void pre_auton()
 {
-  // Set bStopTasksBetweenModes to false if you want to keep user created tasks
-  // running between Autonomous and Driver controlled modes. You will need to
-  // manage all user created tasks if set to false.
-  bStopTasksBetweenModes = true;
+	// Set bStopTasksBetweenModes to false if you want to keep user created tasks
+	// running between Autonomous and Driver controlled modes. You will need to
+	// manage all user created tasks if set to false.
+	bStopTasksBetweenModes = true;
 
 	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
 	// used by the competition include file, for example, you might want
 	// to display your team name on the LCD in this function.
 	// bDisplayCompetitionStatusOnLcd = false;
 
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
+	// All activities that occur before the competition starts
+	// Example: clearing encoders, setting servo positions, ...
 }
 
 /*---------------------------------------------------------------------------*/
@@ -94,15 +94,33 @@ void pre_auton()
 
 task autonomous()
 {
-													// go foward 3 inches at 100 speed
-  move(3.0, 100, false);
-  												// spin around one time
-  spin(1.0, 127, false);
-  												// go forward 12 inches at 127 speed
-  move(12.0, 127, false);
+//open claw
+motor[clawMotor] = -50;
+sleep(1000);
+motor[clawMotor] = 0;
+//rotate 90 degrees
+	spin(-90, 127, false);
+	//raises the arm			------>			//Change to raise arm while it is moving at the same time at some point in the future
+	motor[armMotor] = 50;
+	sleep(1000);
+	//stop raising the arm
+	motor[armMotor] = 0;
 
-  // Remove this function call once you have "real" code.
-  // AutonomousCodePlaceholderForTesting();
+	//goes 4 feet forward at 127 speed
+	move(42, 127, false);
+	//lower arm
+	motor[armMotor] = -50;
+	sleep(900);
+	motor[armMotor] = 0;
+	//move back a bit
+	move(-22, 127, false);
+	//rotate to face the cap
+	spin(90, 127, false);
+
+
+	//Task Below Complete
+	// Remove this function call once you have "real" code.
+	// AutonomousCodePlaceholderForTesting();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -117,13 +135,13 @@ task autonomous()
 
 task usercontrol()
 {
-  // User control code here, inside the loop
+	// User control code here, inside the loop
 
-  while(1 == 1)
+	while(1 == 1)
 	{
 		//Driving Motor Control
-		motor[leftMotor] = vexRT[Ch2] / 2;
-		motor[rightMotor] = vexRT[Ch3] / 2;
+		motor[leftMotor] = vexRT[Ch3] / 2;
+		motor[rightMotor] = vexRT[Ch2] / 2;
 
 		//Arm Control
 		if(vexRT[Btn6U] == 1)
