@@ -108,15 +108,10 @@ task autonomous()
 			move(12, 127, false); //moves 12 inches forward
 			spin(-90, 127, false); //turns 90 degrees left
 
-
 			move(6, 127, false); //robot moves up to the cap and lifts it, flips it, lowers cascade
 			motor[liftMotor] =-50;
 			wait1Msec(1000);
 			motor[liftMotor] =0;
-			motor[liftMotor] =50;
-			wait1Msec(1000);
-			motor[liftMotor] =0;
-
 
 			move(-12, 127, false); //robot moves backward
 			spin(90, 127, false); //turns right
