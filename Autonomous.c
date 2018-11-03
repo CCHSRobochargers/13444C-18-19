@@ -100,22 +100,14 @@ void pre_auton()
 
 task autonomous()
 {
-	if(SensorValue[nearflag] == 0)
-	{
+	//if(nearflag)
+	//{
 		//else(blue);
-		{
-			//robot flips cap
-			move(6, 127, false); //moves up to cap
-			motor[liftMotor] = -50; //lifts cascade
-			wait1Msec(1000); //waits 1 second
-			motor[liftMotor] = 0; //cascade stops
+	//	{
+			//moves even with cap
+			move(12, 127, false); //moves 12 inches forward
+			spin(-90, 127, false); //turns 90 degrees left
 
-			//robot turns 90 degrees to the left
-			spin(-90, 127, false);
-			//robot moves forward
-			move(10, 127, false);
-			//robot turns 90 degrees to the right
-			spin(90, 127, false);
 
 			move(6, 127, false); //robot moves up to the cap and lifts it, flips it, lowers cascade
 			motor[liftMotor] =-50;
@@ -125,22 +117,17 @@ task autonomous()
 			wait1Msec(1000);
 			motor[liftMotor] =0;
 
-			//robot flips cap
-			move(6, 127, false); //moves up to cap
-			motor[liftMotor] = -50; //lifts cascade
-			wait1Msec(1000); //waits 1 second
-			motor[liftMotor] =0; //cascade stops
 
 			move(-12, 127, false); //robot moves backward
-			spin(-90, 127, false); //turns left
-			move(36, 127, false); //moves up and turns flag
+			spin(90, 127, false); //turns right
+			move(36, 127, false); //moves forward 3 feet and turns flag
 
 			move(-6, 127, false); //robot moves back
 			motor[liftMotor] =-50;
 			wait1Msec(900);
 			motor[liftMotor] =0; //the lift is lowered
-		}
-	}
+		//}
+	//}
 }
 	/*---------------------------------------------------------------------------*/
 	/*                                                                           */
