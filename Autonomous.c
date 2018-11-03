@@ -84,6 +84,7 @@ void pre_auton()
 
 	// All activities that occur before the competition starts
 	// Example: clearing encoders, setting servo positions, ...
+	//The Motors are slaved because we had to change to
 	slaveMotor(leftMotor2, leftMotor1);
 	slaveMotor(rightMotor2, rightMotor1);
 }
@@ -100,77 +101,94 @@ void pre_auton()
 
 task autonomous()
 {
-	//if(nearflag)
-	//{
-		//else(blue);
-	//	{
-			//moves even with cap
-			move(12, 127, false); //moves 12 inches forward
-			spin(-90, 127, false); //turns 90 degrees left
-
-			move(6, 127, false); //robot moves up to the cap and lifts it, flips it, lowers cascade
-			motor[liftMotor] =-50;
-			wait1Msec(1000);
-			motor[liftMotor] =0;
-
-			move(-12, 127, false); //robot moves backward
-			spin(90, 127, false); //turns right
-			move(36, 127, false); //moves forward 3 feet and turns flag
-
-			move(-6, 127, false); //robot moves back
-			motor[liftMotor] =-50;
-			wait1Msec(900);
-			motor[liftMotor] =0; //the lift is lowered
-		//}
-	//}
-}
-	/*---------------------------------------------------------------------------*/
-	/*                                                                           */
-	/*                              User Control Task                            */
-	/*                                                                           */
-	/*  This task is used to control your robot during the user control phase of */
-	/*  a VEX Competition.                                                       */
-	/*                                                                           */
-	/*  You must modify the code to add your own robot specific commands here.   */
-	/*---------------------------------------------------------------------------*/
-
-	task usercontrol()
+	if((SensorValue[nearflag] == 0) && (SensorValue[blue] == 0))
 	{
-		// User control code here, inside the loop
+		//moves even with cap
+		move(12, 127, false); //moves 12 inches forward
+		spin(-90, 127, false); //turns 90 degrees left
 
-		while(1 == 1)
-		{
-			//Driving Motor Control
-			motor[leftMotor1] = vexRT[Ch3] / 2;
-			motor[rightMotor1] = vexRT[Ch2] / 2;
+		move(6, 127, false); //robot moves up to the cap and lifts it, flips it, lowers cascade
+		motor[liftMotor] =-50;
+		wait1Msec(1000);
+		motor[liftMotor] =0;
 
-			//Lift Control
-			if(vexRT[Btn6U] == 1)
-			{
-				motor[liftMotor] = 100;
-			}
-			else if(vexRT[Btn6D] == 1)
-			{
-				motor[liftMotor] = -40;
-			}
-			else
-			{
-				motor[liftMotor] = 0;
-			}
+		move(-12, 127, false); //robot moves backward
+		spin(90, 127, false); //turns right
+		move(36, 127, false); //moves forward 3 feet and turns flag
 
-			//claw control
-			//if(vexRT[Btn5U] == 1)       	//If Button 6U is pressed...
-			//{
-			//motor[wristMotor] = 127;  		//...close the gripper.
-			//}
-			//else if(vexRT[Btn5D] == 1)  	//Else, if button 6D is pressed...
-			//{
-			//motor[wristMotor] = -127; 		//...open the gripper.
-			//}
-			//else                      		//Else (neither button is pressed)...
-			//{
-			//motor[wristMotor] = 0;    		//...stop the gripper.
-			//}
-			//delay(10);
-		}
+		move(-6, 127, false); //robot moves back
+		motor[liftMotor] =-50;
+		wait1Msec(900);
+		motor[liftMotor] =0; //the lift is lowered
 	}
+	else if ((SensorValue[nearflag] == 0) && (SensorValue[blue] == 1)) //Inverse --Red Side
+	{
+		//moves even with cap
+		move(12, 127, false); //moves 12 inches forward
+		spin(90, 127, false); //turns 90 degrees right
+
+		move(6, 127, false); //robot moves up to the cap and lifts it, flips it, lowers cascade
+		motor[liftMotor] =-50;
+		wait1Msec(1000);
+		motor[liftMotor] =0;
+
+		move(-12, 127, false); //robot moves backward
+		spin(-90, 127, false); //turns left
+		move(36, 127, false); //moves forward 3 feet and turns flag
+
+		move(-6, 127, false); //robot moves back
+		motor[liftMotor] =-50;
+		wait1Msec(900);
+		motor[liftMotor] =0; //the lift is lowered
+	}
+}
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              User Control Task                            */
+/*                                                                           */
+/*  This task is used to control your robot during the user control phase of */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
+
+task usercontrol()
+{
+	// User control code here, inside the loop
+
+	while(1 == 1)
+	{
+		//Driving Motor Control
+		motor[leftMotor1] = vexRT[Ch3] / 2;
+		motor[rightMotor1] = vexRT[Ch2] / 2;
+
+		//Lift Control
+		if(vexRT[Btn6U] == 1)
+		{
+			motor[liftMotor] = 200;
+		}
+		else if(vexRT[Btn6D] == 1)
+		{
+			motor[liftMotor] = -40;
+		}
+		else
+		{
+			motor[liftMotor] = 0;
+		}
+
+		//claw control
+		//if(vexRT[Btn5U] == 1)       	//If Button 6U is pressed...
+		//{
+		//motor[wristMotor] = 127;  		//...close the gripper.
+		//}
+		//else if(vexRT[Btn5D] == 1)  	//Else, if button 6D is pressed...
+		//{
+		//motor[wristMotor] = -127; 		//...open the gripper.
+		//}
+		//else                      		//Else (neither button is pressed)...
+		//{
+		//motor[wristMotor] = 0;    		//...stop the gripper.
+		//}
+		//delay(10);
+	}
+}
