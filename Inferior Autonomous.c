@@ -141,7 +141,7 @@ task usercontrol()
 		motor[leftMotor1] = vexRT[Ch3] / 2;
 		motor[rightMotor1] = vexRT[Ch2] / 2;
 
-		//Lift Control
+		//Lift Control (2nd controller)
 		if(vexRT[Btn6U] == 1)
 		{
 			motor[liftMotor] = 200;
