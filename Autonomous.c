@@ -95,16 +95,20 @@ int count = 0;
 //Wait for Press--------------------------------------------------
 void waitForPress()
 {
-	while(nLCDButtons == 0){}
-	wait1Msec(5);
+	while(nLCDButtons == 0)
+	{
+		wait1Msec(5);
+	}
 }
 //----------------------------------------------------------------
 
 //Wait for Release------------------------------------------------
 void waitForRelease()
 {
-	while(nLCDButtons != 0){}
-	wait1Msec(5);
+	while(nLCDButtons != 0)
+	{
+		wait1Msec(5);
+	}
 }
 //----------------------------------------------------------------
 
@@ -124,7 +128,7 @@ void pre_auton()
 
 	// All activities that occur before the competition starts
 	// Example: clearing encoders, setting servo positions, ...
-	//The Motors are slaved because we had to change to
+	//The Motors are slaved because we had to change to four motors from two and this was the easiest way to type it
 	slaveMotor(leftMotor2, leftMotor1);
 	slaveMotor(rightMotor2, rightMotor1);
 
@@ -133,12 +137,14 @@ void pre_auton()
 
 	//------------- Beginning of User Interface Code ---------------
 	//Clear LCD
-
 	clearLCDLine(0);
 	clearLCDLine(1);
+
 	//Loop while center button is not pressed
+
 	while(nLCDButtons != centerButton)
 	{
+
 		//Switch case that allows the user to choose from 4 different options
 		switch(count){
 		case 0:
@@ -150,7 +156,7 @@ void pre_auton()
 			if(nLCDButtons == leftButton)
 			{
 				waitForRelease();
-				count = 3;
+				count = 4;
 			}
 			else if(nLCDButtons == rightButton)
 			{
@@ -206,11 +212,28 @@ void pre_auton()
 			else if(nLCDButtons == rightButton)
 			{
 				waitForRelease();
+				count++;
+			}
+			break;
+		case 4:
+			//Display fourth choice
+			displayLCDCenteredString(0, "No Autonomous");
+			displayLCDCenteredString(1, "<		Enter		>");
+			waitForPress();
+			//Increment or decrement "count" based on button press
+			if(nLCDButtons == leftButton)
+			{
+				waitForRelease();
+				count--;
+			}
+			else if(nLCDButtons == rightButton)
+			{
+				waitForRelease();
 				count = 0;
 			}
 			break;
 		default:
-			count = 0;
+			count = -1;
 			break;
 		}
 		bLCDBacklight = false;
@@ -226,18 +249,19 @@ task autonomous()
 	clearLCDLine(1);
 	//Switch Case that actually runs the user choice
 
+
 	switch(count){
-	//this case is the autonomous for the blue side closest to flag
+		//this case is the autonomous for the blue side closest to flag
 	case 0:
 		//If count = 0, run the code correspoinding with choice 1
 		displayLCDCenteredString(0, "BlueFlag");
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(2000);						// Robot waits for 2000 milliseconds
 
-		move(-44, 127, false);
+		move(44, 127, false);
 
 		break;
-	//this case is the autonomous for the blue side away from flag
+		//this case is the autonomous for the blue side away from flag
 	case 1:
 		//If count = 1, run the code correspoinding with choice 2
 		displayLCDCenteredString(0, "BlueNoFlag");
@@ -271,6 +295,18 @@ task autonomous()
 		spin(-45, 127, false);
 		flip();
 		break;
+		//this case is for the potential instance where we would not want to run an autonomous
+	case 4:
+		//If count = 3, run the code correspoinding with choice 5
+		displayLCDCenteredString(0, "NoAutonomous");
+		displayLCDCenteredString(1, "is running!");
+
+		while(1 == 1)
+		{
+			wait1Msec(1000);
+		}
+
+		//break;
 	default:
 		displayLCDCenteredString(0, "You Idiot!");
 		displayLCDCenteredString(1, "it broke");
@@ -294,16 +330,13 @@ task usercontrol()
 
 	while(1 == 1)
 	{
-		//Driving Motor Control
-		motor[leftMotor1] = vexRT[Ch3] / 2;
-		motor[rightMotor1] = vexRT[Ch2] / 2;
 
 		//Lift Control
-		if(vexRT[Btn6U] == 1)
+		if(vexRT[Btn6UXmtr2] == 1)
 		{
-			motor[liftMotor] = 200;
+			motor[liftMotor] = 127;
 		}
-		else if(vexRT[Btn6D] == 1)
+		else if(vexRT[Btn6DXmtr2] == 1)
 		{
 			motor[liftMotor] = -40;
 		}
@@ -312,6 +345,34 @@ task usercontrol()
 			motor[liftMotor] = 0;
 		}
 
+		//Flipper Control
+		if (vexRT[Btn5UXmtr2] == 1)
+		{
+			motor[flipMotor] = 127;
+		}
+		else if (vexRT[Btn5DXmtr2] == 1)
+		{
+			motor[flipMotor] = -50;
+		}
+		else
+		{
+			motor[flipMotor] = 0;
+		}
+
+
+		if (vexRT[Btn5U] == 1)
+		{
+			//while the 5U button is pressed the motors will move at half speed
+			motor[leftMotor1] = (vexRT[Ch3] / 2)/2;
+			motor[rightMotor1] = (vexRT[Ch2] / 2)/2;
+		}
+
+		else
+		{
+			//Driving Motor Control
+			motor[leftMotor1] = vexRT[Ch3] / 2;
+			motor[rightMotor1] = vexRT[Ch2] / 2;
+		}
 		//wrist control
 		//if(vexRT[Btn5U] == 1)       	//If Button 6U is pressed...
 		//{
