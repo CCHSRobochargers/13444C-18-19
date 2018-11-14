@@ -302,8 +302,11 @@ task autonomous()
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(2000);						// Robot waits for 2000 milliseconds
 
-		move(44, 127, false);
-		move(-12, 127, false);
+		move(44, 127, false); //robot goes forward 44 inches and turns the flag
+		spin(-45, 127, false); //turns left lining up the flipper with the cap
+		flipdown();
+		move(-4, 100, false);
+		flipup();
 
 		break;
 		//this case is the autonomous for the red side away from flag
