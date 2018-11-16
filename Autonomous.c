@@ -162,7 +162,7 @@ void pre_auton()
 		switch(count){
 		case 0:
 			//Display first choice
-			displayLCDCenteredString(0, "BlueFlag");
+			displayLCDCenteredString(0, "BlueFlagSide");
 			displayLCDCenteredString(1, "<		 Enter		>");
 			waitForPress();
 			//Increment or decrement "count" based on button press
@@ -179,7 +179,7 @@ void pre_auton()
 			break;
 		case 1:
 			//Display second choice
-			displayLCDCenteredString(0, "BlueNoFlag");
+			displayLCDCenteredString(0, "BlueNotFlagSide");
 			displayLCDCenteredString(1, "<		 Enter		>");
 			waitForPress();
 			//Increment or decrement "count" based on button press
@@ -196,7 +196,7 @@ void pre_auton()
 			break;
 		case 2:
 			//Display third choice
-			displayLCDCenteredString(0, "RedFlag");
+			displayLCDCenteredString(0, "RedFlagSide");
 			displayLCDCenteredString(1, "<		 Enter		>");
 			waitForPress();
 			//Increment or decrement "count" based on button press
@@ -213,7 +213,7 @@ void pre_auton()
 			break;
 		case 3:
 			//Display fourth choice
-			displayLCDCenteredString(0, "RedNoFlag");
+			displayLCDCenteredString(0, "RedNotFlagSide");
 			displayLCDCenteredString(1, "<		 Enter		>");
 			waitForPress();
 			//Increment or decrement "count" based on button press
@@ -267,12 +267,14 @@ task autonomous()
 		//this case is the autonomous for the blue side closest to flag
 	case 0:
 		//If count = 0, run the code correspoinding with choice 1
-		displayLCDCenteredString(0, "BlueFlag");
+		displayLCDCenteredString(0, "BlueFlagSide");
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(2000);						// Robot waits for 2000 milliseconds
 
 		move(44, 127, false); //robot goes up to and turn flag
+
 		move(-22, 127, false); //robot go backward half the distance
+
 		spin(-90, 127, false); //robot turns right so the back is facing the cap
 
 		move(-12, 127, false); //robot goes in reverse and goes under the cap
@@ -281,24 +283,31 @@ task autonomous()
 		//this case is the autonomous for the blue side away from flag
 	case 1:
 		//If count = 1, run the code correspoinding with choice 2
-		displayLCDCenteredString(0, "BlueNoFlag");
+		displayLCDCenteredString(0, "BlueNotFlagSide");
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(1000);						// Robot waits for 1000 milliseconds
 
 		move(6, 127, false); //these two lines of code are to put the claw down
+
 		move(-6, 127, false);
+
 		move(28, 127, false); //goes forward to the cap
+
 		spin(-45, 127, false); //these two lines are the claw sweeping underneath cap
+
 		spin(45, 127, false);
+
 		flipdown(); //flipper comes down
-		move(4, 100, false); //moves under
+
+		move(4, 100, false); //moves under cap
+
 		flipup();
 
 		break;
 		//this case is the autonomous for the red side near the flag
 	case 2:
 		//If count = 2, run the code correspoinding with choice 3
-		displayLCDCenteredString(0, "RedFlag");
+		displayLCDCenteredString(0, "RedFlagSide");
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(2000);						// Robot waits for 2000 milliseconds
 
@@ -312,14 +321,26 @@ task autonomous()
 		//this case is the autonomous for the red side away from flag
 	case 3:
 		//If count = 3, run the code correspoinding with choice 4
-		displayLCDCenteredString(0, "RedNoFlag");
+		displayLCDCenteredString(0, "RedNotFlagSide");
 		displayLCDCenteredString(1, "is running!");
 		wait1Msec(1000);						// Robot waits for 1000 milliseconds
 
-		move(30, 127, false);
-		spin(45, 127, false);
+		move(6, 127, false); //these two lines of code are to put the claw down
+
+		move(-6, 127, false);
+
+		move(28, 127, false); //goes forward to the cap
+
+		spin(45, 127, false); //these two lines are the claw sweeping underneath cap
+
 		spin(-45, 127, false);
-		flipdown();
+
+		flipdown(); //flipper comes down
+
+		move(4, 100, false); //moves under cap
+
+		flipup();
+
 		break;
 		//this case is for the potential instance where we would not want to run an autonomous
 	case 4:
