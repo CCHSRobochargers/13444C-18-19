@@ -196,7 +196,7 @@ void pre_auton()
 			if(nLCDButtons == leftButton)
 			{
 				waitForRelease();
-				count = 5;
+				count = 6;
 			}
 			else if(nLCDButtons == rightButton)
 			{
@@ -273,7 +273,24 @@ void pre_auton()
 			}
 			break;
 		case 5:
-			//Display sixth choice
+		//Display sixth choice
+			displayLCDCenteredString(0, "Red 2 Caps");
+			displayLCDCenteredString(1, "<		 Enter		>");
+			waitForPress();
+			//Increment or decrement "count" based on button press
+			if(nLCDButtons == leftButton)
+			{
+				waitForRelease();
+				count--;
+			}
+			else if(nLCDButtons == rightButton)
+			{
+				waitForRelease();
+				count++;
+			}
+			break;
+		case 6:
+			//Display seventh choice
 			displayLCDCenteredString(0, "No Autonomous");
 			displayLCDCenteredString(1, "<		Enter		>");
 			waitForPress();
@@ -345,13 +362,13 @@ task autonomous()
 
 		flipup(); //flipper comes up so it doesn't hook on platform
 
-		move(-3, 127, false); //moves so that when the robot turns it is centered on the platform
+		move(-1, 127, false); //moves so that when the robot turns it is centered on the platform
 
 		spin(-100, 127, false); //turns 90 degrees to the right
 
 		move(10, 127, false); //robot moves back to build momentum
 
-		move(-40, 127, false); //goes onto platform
+		move(-41, 127, false); //goes onto platform
 
 		break;
 
@@ -412,7 +429,7 @@ task autonomous()
 
 		move(-3, 127, false); //moves so that when the robot turns it is centered on the platform
 
-		spin(100, 127, false); //turns 90 degrees to the right
+		spin(110, 127, false); //turns 90 degrees to the right
 
 		move(10, 127, false); //robot moves back to build momentum
 
@@ -420,11 +437,37 @@ task autonomous()
 
 		break;
 
-		//this case is for the potential instance where we would not want to run an autonomous
-	case 5:
+		case 5:
 		//If count = 5, run the code correspoinding with choice 6
+		displayLCDCenteredString(0, "Red 2 Caps");
+		displayLCDCenteredString(1, "is running!");
+
+		fliplow();
+
+		move(-38, 127, false); //goes forward to the cap
+
+		flipball();
+
+		move(9, 127, false); //goes backward 9 inches to avoid ball
+
+		flipup(); //flipper comes up so it doesn't hook on platform
+
+		spin(-68, 127, false); //robot turns to line up with the other cap
+
+		flipdown(); //flipper comes down
+
+		move(-13, 127, false); //robot moves under the other cap
+
+		flipup(); //flipper flips cap
+
+		break;
+
+		//this case is for the potential instance where we would not want to run an autonomous
+	case 6:
+		//If count = 6, run the code correspoinding with choice 7
 		displayLCDCenteredString(0, "NoAutonomous");
 		displayLCDCenteredString(1, "is running!");
+
 		break;
 
 	default:
@@ -485,6 +528,20 @@ task usercontrol()
 			motor[flipMotor] = 0;
 		}
 
+		//this function defines the brake button
+		if (vexRT[Btn6U] == 1)
+		{
+			//while the 6U button is pressed the drive motors will stop
+			motor[rightMotor1] = 0;
+			motor[leftMotor1] = 0;
+		}
+
+		else
+		{
+		//Driving Motor Control
+			motor[leftMotor1] = vexRT[Ch3] / 2;
+			motor[rightMotor1] = vexRT[Ch2] / 2;
+		}
 
 		if (vexRT[Btn5U] == 1)
 		{
