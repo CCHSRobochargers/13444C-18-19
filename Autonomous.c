@@ -427,9 +427,9 @@ task autonomous()
 
 		flipup(); //flipper comes up so it doesn't hook on platform
 
-		move(-3, 127, false); //moves so that when the robot turns it is centered on the platform
+		move(-2, 127, false); //moves so that when the robot turns it is centered on the platform
 
-		spin(110, 127, false); //turns 90 degrees to the right
+		spin(100, 127, false); //turns 90 degrees to the right
 
 		move(10, 127, false); //robot moves back to build momentum
 
@@ -452,7 +452,7 @@ task autonomous()
 
 		flipup(); //flipper comes up so it doesn't hook on platform
 
-		spin(-68, 127, false); //robot turns to line up with the other cap
+		spin(-60, 127, false); //robot turns to line up with the other cap
 
 		flipdown(); //flipper comes down
 
